@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Rekod Disiplin Pelajar</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background:
+    radial-gradient(circle at top, #1e293b 0%, #020617 55%);
+  color: white;
+  min-height: 100vh;
+}
+
+.container-main {
+  width: 100%;
+  max-width: 1100px;
+  margin: auto;
+  padding: 25px 18px 60px;
+}
+
+.glass {
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 20px 50px rgba(0,0,0,.3);
+  backdrop-filter: blur(12px);
+}
+
+.input-box {
+  width: 100%;
+  background: #020617;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 15px;
+  color: white;
+  outline: none;
+  font-size: 16px;
+}
+
+.input-box:focus {
+  border-color: #38bdf8;
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 7px;
+  font-weight: bold;
+}
+
+.btn-main {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: none;
+  background: #0284c7;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-main:hover {
+  background: #0369a1;
+}
+
+.student-suggestions {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.student-option {
+  padding: 13px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #1e293b;
+}
+
+.student-option:hover {
+  background: #1e293b;
+}
+
+.record-card {
+  border: 1px solid #334155;
+  background: rgba(2,6,23,.75);
+  border-radius: 16px;
+  padding: 17px;
+}
+
+.small-label {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.badge-green {
+  background: rgba(34,197,94,.15);
+  color: #4ade80;
+}
+
+.badge-yellow {
+  background: rgba(234,179,8,.15);
+  color: #facc15;
+}
+
+.badge-red {
+  background: rgba(239,68,68,.15);
+  color: #f87171;
+}
+
+.whatsapp {
+  background: #16a34a;
+}
+
+.whatsapp:hover {
+  background: #15803d;
+}
+
+.warning-btn {
+  background: #b45309;
+}
+
+.warning-btn:hover {
+  background: #92400e;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 500;
+}
+
+.modal {
+  width: 100%;
+  max-width: 420px;
+  padding: 25px;
+  border-radius: 20px;
+}
+
+.loading {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(2,6,23,.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  border: 4px solid #334155;
+  border-top-color: #38bdf8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.filter-btn {
+  width: 100%;
+  padding: 12px 8px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.filter-btn:hover {
+  background: #1e293b;
+  color: white;
+}
+
+.filter-btn.active {
+  background: #0284c7;
+  border-color: #0284c7;
+  color: white;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="container-main">
+
+  <!-- HEADER -->
+
+  <div class="text-center mb-8">
+
+    <div class="text-sky-400 font-bold tracking-widest text-sm mb-2">
+      SISTEM SEKOLAH
+    </div>
+
+    <h1 class="text-3xl md:text-4xl font-black">
+      REKOD DISIPLIN
+    </h1>
+
+    <p class="text-slate-400 mt-2">
+      Rekod Disiplin Pelajar
+    </p>
+
+  </div>
+
+
+  <!-- TEACHER FORM -->
+
+  <div class="glass rounded-3xl p-5 md:p-7 mb-7">
+
+    <div class="flex items-center gap-3 mb-6">
+
+      <div class="text-2xl">
+        👨‍🏫
+      </div>
+
+      <div>
+
+        <h2 class="text-xl font-bold">
+          Rekod Baharu
+        </h2>
+
+        <p class="text-slate-400 text-sm">
+          Untuk kegunaan semua guru
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- STUDENT -->
+
+    <div class="mb-5">
+
+      <label class="label">
+        NAMA MURID
+      </label>
+
+      <div class="relative">
+
+        <input
+          id="studentInput"
+          class="input-box"
+          placeholder="Taip nama murid..."
+          autocomplete="off"
+        >
+
+        <div
+          id="suggestions"
+          class="student-suggestions hidden">
+        </div>
+
+      </div>
+
+      <div
+        id="selectedStudent"
+        class="hidden mt-3 rounded-xl bg-sky-500/10 border border-sky-500/20 p-3">
+
+        <div class="text-sky-300 font-bold"
+             id="selectedName">
+        </div>
+
+        <div class="text-slate-400 text-sm"
+             id="selectedClass">
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- KESALAHAN -->
+
+    <div class="mb-5">
+
+      <label class="label">
+        JENIS KESALAHAN
+      </label>
+
+      <select
+        id="kesalahan"
+        class="input-box">
+
+        <option value="">
+          -- Pilih kesalahan --
+        </option>
+
+        <option>
+          Bermain sewaktu guru mengajar
+        </option>
+
+        <option>
+          Membuli / mengganggu rakan
+        </option>
+
+        <option>
+          Bermain sewaktu solat/rutin
+        </option>
+
+        <option>
+          Tidak membawa buku
+        </option>
+
+        <option>
+          Tidak menyiapkan tugasan
+        </option>
+
+        <option>
+          Lewat masuk kelas
+        </option>
+
+        <option>
+          Keluar kelas tanpa kebenaran
+        </option>
+
+        <option>
+          Tidak mematuhi arahan guru
+        </option>
+
+        <option>
+          Penggunaan telefon / peranti tanpa kebenaran
+        </option>
+
+        <option>
+          Lain-lain
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- TINDAKAN -->
+
+    <div class="mb-6">
+
+      <label class="label">
+        TINDAKAN GURU
+      </label>
+
+      <select
+        id="tindakan"
+        class="input-box">
+
+        <option value="">
+          -- Pilih tindakan --
+        </option>
+
+        <option>
+          Teguran/nasihat/larangan
+        </option>
+
+        <option>
+          Denda/hukuman
+        </option>
+
+        <option>
+          Tugasan pemulihan
+        </option>
+
+        <option>
+          Rujuk Guru Kelas
+        </option>
+
+        <option>
+          Rujuk Ketua Disiplin
+        </option>
+        
+        <option>
+          Rujuk Mudir
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <button
+      class="btn-main"
+      onclick="saveRecord()">
+
+      ✓ SIMPAN REKOD
+
+    </button>
+
+  </div>
+
+
+  <!-- ADMIN -->
+
+  <div class="text-center">
+
+    <button
+      onclick="openAdminLogin()"
+      class="text-slate-400 hover:text-white text-sm">
+
+      🔐 Akses Ketua Disiplin
+
+    </button>
+
+  </div>
+
+
+  <!-- ADMIN DASHBOARD -->
+
+  <div
+    id="adminDashboard"
+    class="hidden mt-8">
+
+    <div class="glass rounded-3xl p-5 md:p-7">
+
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+
+        <div>
+
+          <div class="text-sky-400 text-xs font-bold tracking-widest">
+            KETUA DISIPLIN
+          </div>
+
+          <h2 class="text-2xl font-black mt-1">
+            Semua Rekod
+          </h2>
+
+        </div>
+
+        <button
+          onclick="loadRecords()"
+          class="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm">
+
+          ↻ Refresh
+
+        </button>
+
+      </div>
+
+
+      <!-- STATS -->
+
+      <div class="grid grid-cols-3 gap-3 mb-6">
+
+        <div class="rounded-2xl bg-slate-900 p-4">
+
+          <div class="small-label">
+            JUMLAH
+          </div>
+
+          <div
+            id="statTotal"
+            class="text-2xl font-black mt-1">
+            0
+          </div>
+
+        </div>
+
+
+        <div class="rounded-2xl bg-slate-900 p-4">
+
+          <div class="small-label">
+            BELUM HANTAR
+          </div>
+
+          <div
+            id="statParent"
+            class="text-2xl font-black mt-1 text-yellow-400">
+            0
+          </div>
+
+        </div>
+
+
+        <div class="rounded-2xl bg-slate-900 p-4">
+
+          <div class="small-label">
+            AMARAN
+          </div>
+
+          <div
+            id="statWarning"
+            class="text-2xl font-black mt-1 text-red-400">
+            0
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- SEARCH RECORD -->
+
+      <input
+          id="recordSearch"
+          class="input-box mb-3"
+          placeholder="🔎 Cari nama murid / kesalahan..."
+          oninput="renderRecords()"
+        >
+        
+        <!-- FILTER REKOD -->
+        <div class="grid grid-cols-3 gap-2 mb-5">
+        
+          <button
+            id="filterAll"
+            onclick="setRecordFilter('all')"
+            class="filter-btn active">
+            SEMUA
+          </button>
+        
+          <button
+            id="filterToday"
+            onclick="setRecordFilter('today')"
+            class="filter-btn">
+            HARI INI
+          </button>
+        
+          <button
+            id="filterWeek"
+            onclick="setRecordFilter('week')"
+            class="filter-btn">
+            MINGGU INI
+          </button>
+        
+        </div>
+
+
+      <div
+        id="recordsContainer"
+        class="space-y-4">
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- PASSWORD MODAL -->
+
+<div
+  id="adminModal"
+  class="modal-bg hidden">
+
+  <div class="modal glass">
+
+    <div class="text-center mb-5">
+
+      <div class="text-3xl mb-2">
+        🔐
+      </div>
+
+      <h2 class="text-xl font-bold">
+        Ketua Disiplin
+      </h2>
+
+      <p class="text-slate-400 text-sm mt-1">
+        Masukkan password untuk akses
+      </p>
+
+    </div>
+
+
+    <input
+      id="adminPassword"
+      type="password"
+      class="input-box mb-4"
+      placeholder="Password"
+      onkeydown="if(event.key==='Enter') loginAdmin()"
+    >
+
+
+    <button
+      onclick="loginAdmin()"
+      class="btn-main mb-3">
+
+      MASUK
+
+    </button>
+
+
+    <button
+      onclick="closeAdminLogin()"
+      class="w-full py-3 text-slate-400">
+
+      Batal
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- LOADING -->
+
+<div
+  id="loading"
+  class="loading hidden">
+
+  <div class="text-center">
+
+    <div class="spinner mx-auto mb-4"></div>
+
+    <div class="text-slate-300">
+      Memproses...
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/****************************************************
+ * IMPORTANT
+ *
+ * Replace this URL with your Apps Script Web App URL
+ ****************************************************/
+
+const API_URL =
+  'https://script.google.com/macros/s/AKfycbxYsvdbZZVEiKTfz3T0Jb-cauEDyXg2jW1lW-PIsvSHCQofUzbWftucBndbKuMNctE1UQ/exec';
+
+
+let students = [];
+
+let selectedStudent = null;
+
+let records = [];
+
+let adminPassword = '';
+
+let recordFilter = 'all';
+
+
+// ==================================================
+// INITIAL LOAD
+// ==================================================
+
+window.addEventListener('load', () => {
+
+  loadStudents();
+
+});
+
+
+// ==================================================
+// JSONP REQUEST
+// ==================================================
+
+function apiRequest(params, callback) {
+
+  const callbackName =
+    'jsonp_' + Date.now() + '_' +
+    Math.floor(Math.random() * 10000);
+
+  params.callback = callbackName;
+
+  const query =
+    Object.keys(params)
+      .map(key =>
+        encodeURIComponent(key) +
+        '=' +
+        encodeURIComponent(params[key])
+      )
+      .join('&');
+
+  const script =
+    document.createElement('script');
+
+  window[callbackName] = function(data) {
+
+    try {
+      callback(data);
+    } finally {
+
+      delete window[callbackName];
+
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+
+    }
+
+  };
+
+  script.src =
+    API_URL + '?' + query;
+
+  script.onerror = function() {
+
+    delete window[callbackName];
+
+    if (script.parentNode) {
+      script.parentNode.removeChild(script);
+    }
+
+    hideLoading();
+
+    alert(
+      'Tidak dapat berhubung dengan sistem.'
+    );
+
+  };
+
+  document.body.appendChild(script);
+
+}
+
+
+// ==================================================
+// LOAD STUDENTS
+// ==================================================
+
+function loadStudents() {
+
+  apiRequest(
+    {
+      action: 'students'
+    },
+
+    function(data) {
+
+      if (!data.success) {
+
+        alert(data.message);
+        return;
+
+      }
+
+      students =
+        data.students || [];
+
+    }
+
+  );
+
+}
+
+
+// ==================================================
+// STUDENT SEARCH
+// ==================================================
+
+document
+  .getElementById('studentInput')
+  .addEventListener('input', function() {
+
+    const query =
+      this.value
+        .trim()
+        .toLowerCase();
+
+    selectedStudent = null;
+
+    document
+      .getElementById('selectedStudent')
+      .classList.add('hidden');
+
+    if (!query) {
+
+      document
+        .getElementById('suggestions')
+        .classList.add('hidden');
+
+      return;
+
+    }
+
+    const matches =
+      students
+        .filter(s =>
+          s.name
+            .toLowerCase()
+            .includes(query)
+        )
+        .slice(0, 10);
+
+    const box =
+      document.getElementById(
+        'suggestions'
+      );
+
+    box.innerHTML = '';
+
+    if (!matches.length) {
+
+      box.classList.add('hidden');
+      return;
+
+    }
+
+    matches.forEach(student => {
+
+      const div =
+        document.createElement('div');
+
+      div.className =
+        'student-option';
+
+      div.innerHTML = `
+        <div class="font-bold">
+          ${escapeHtml(student.name)}
+        </div>
+
+        <div class="text-sm text-slate-400">
+          ${escapeHtml(student.kelas)}
+        </div>
+      `;
+
+      div.onclick = function() {
+
+        selectStudent(student);
+
+      };
+
+      box.appendChild(div);
+
+    });
+
+    box.classList.remove('hidden');
+
+  });
+
+
+// ==================================================
+// SELECT STUDENT
+// ==================================================
+
+function selectStudent(student) {
+
+  selectedStudent = student;
+
+  document
+    .getElementById('studentInput')
+    .value = student.name;
+
+  document
+    .getElementById('selectedName')
+    .textContent = student.name;
+
+  document
+    .getElementById('selectedClass')
+    .textContent =
+      'Kelas ' + student.kelas;
+
+  document
+    .getElementById('selectedStudent')
+    .classList.remove('hidden');
+
+  document
+    .getElementById('suggestions')
+    .classList.add('hidden');
+
+}
+
+
+// ==================================================
+// SAVE RECORD
+// ==================================================
+
+function saveRecord() {
+
+  if (!selectedStudent) {
+
+    alert(
+      'Sila cari dan pilih nama murid terlebih dahulu.'
+    );
+
+    return;
+
+  }
+
+  const kesalahan =
+    document.getElementById(
+      'kesalahan'
+    ).value;
+
+  const tindakan =
+    document.getElementById(
+      'tindakan'
+    ).value;
+
+
+  if (!kesalahan) {
+
+    alert(
+      'Sila pilih jenis kesalahan.'
+    );
+
+    return;
+
+  }
+
+
+  if (!tindakan) {
+
+    alert(
+      'Sila pilih tindakan guru.'
+    );
+
+    return;
+
+  }
+
+
+  showLoading();
+
+
+  apiRequest(
+
+    {
+      action: 'save',
+
+      nama:
+        selectedStudent.name,
+
+      kelas:
+        selectedStudent.kelas,
+
+      kesalahan:
+        kesalahan,
+
+      tindakan:
+        tindakan
+    },
+
+    function(data) {
+
+      hideLoading();
+
+      if (!data.success) {
+
+        alert(data.message);
+        return;
+
+      }
+
+
+      alert(
+        '✓ Rekod disiplin berjaya disimpan.'
+      );
+
+
+      // RESET FORM
+
+      selectedStudent = null;
+
+      document
+        .getElementById('studentInput')
+        .value = '';
+
+      document
+        .getElementById('selectedStudent')
+        .classList.add('hidden');
+
+      document
+        .getElementById('kesalahan')
+        .value = '';
+
+      document
+        .getElementById('tindakan')
+        .value = '';
+
+    }
+
+  );
+
+}
+
+
+// ==================================================
+// ADMIN LOGIN
+// ==================================================
+
+function openAdminLogin() {
+
+  document
+    .getElementById('adminModal')
+    .classList.remove('hidden');
+
+  document
+    .getElementById('adminPassword')
+    .value = '';
+
+  setTimeout(() => {
+
+    document
+      .getElementById('adminPassword')
+      .focus();
+
+  }, 100);
+
+}
+
+
+function closeAdminLogin() {
+
+  document
+    .getElementById('adminModal')
+    .classList.add('hidden');
+
+}
+
+
+// ==================================================
+// LOGIN
+// ==================================================
+
+function loginAdmin() {
+
+  const password =
+    document
+      .getElementById('adminPassword')
+      .value;
+
+  if (!password) {
+
+    alert('Sila masukkan password.');
+    return;
+
+  }
+
+  showLoading();
+
+  apiRequest(
+
+    {
+      action: 'records',
+      password: password
+    },
+
+    function(data) {
+
+      hideLoading();
+
+      if (!data.success) {
+
+        alert('Password salah.');
+        return;
+
+      }
+
+      adminPassword = password;
+
+      records =
+        data.records || [];
+
+      closeAdminLogin();
+
+      document
+        .getElementById('adminDashboard')
+        .classList.remove('hidden');
+
+      renderRecords();
+
+      document
+        .getElementById(
+          'adminDashboard'
+        )
+        .scrollIntoView({
+          behavior: 'smooth'
+        });
+
+    }
+
+  );
+
+}
+
+
+// ==================================================
+// LOAD RECORDS
+// ==================================================
+
+function loadRecords() {
+
+  showLoading();
+
+  apiRequest(
+
+    {
+      action: 'records',
+      password: adminPassword
+    },
+
+    function(data) {
+
+      hideLoading();
+
+      if (!data.success) {
+
+        alert(data.message);
+        return;
+
+      }
+
+      records =
+        data.records || [];
+
+      renderRecords();
+
+    }
+
+  );
+
+}
+
+
+// ==================================================
+// RENDER RECORDS
+// ==================================================
+
+// ==================================================
+// RECORD FILTER
+// ==================================================
+
+function setRecordFilter(filter) {
+
+  recordFilter = filter;
+
+  // Remove active from all buttons
+  document
+    .getElementById('filterAll')
+    .classList.remove('active');
+
+  document
+    .getElementById('filterToday')
+    .classList.remove('active');
+
+  document
+    .getElementById('filterWeek')
+    .classList.remove('active');
+
+
+  // Add active to selected button
+  if (filter === 'all') {
+
+    document
+      .getElementById('filterAll')
+      .classList.add('active');
+
+  }
+
+  if (filter === 'today') {
+
+    document
+      .getElementById('filterToday')
+      .classList.add('active');
+
+  }
+
+  if (filter === 'week') {
+
+    document
+      .getElementById('filterWeek')
+      .classList.add('active');
+
+  }
+
+
+  renderRecords();
+
+}
+
+function renderRecords() {
+
+  const container =
+    document.getElementById(
+      'recordsContainer'
+    );
+
+  const search =
+    document
+      .getElementById('recordSearch')
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const filtered =
+    records.filter(record => {
+
+      const text =
+        (
+          record.nama + ' ' +
+          record.kelas + ' ' +
+          record.kesalahan + ' ' +
+          record.tindakan
+        ).toLowerCase();
+
+      return text.includes(search);
+
+    });
+
+
+  // STATS
+
+  document
+    .getElementById('statTotal')
+    .textContent =
+      records.length;
+
+
+  document
+    .getElementById('statParent')
+    .textContent =
+      records.filter(r =>
+        r.parent !== 'TELAH DIHANTAR'
+      ).length;
+
+
+  document
+    .getElementById('statWarning')
+    .textContent =
+      records.filter(r =>
+        r.warning === 'TELAH DIKELUARKAN'
+      ).length;
+
+
+  if (!filtered.length) {
+
+    container.innerHTML = `
+
+      <div class="text-center
+                  text-slate-500
+                  py-10">
+
+        Tiada rekod dijumpai.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    filtered
+      .map(record => createRecordHTML(record))
+      .join('');
+
+}
+
+
+// ==================================================
+// RECORD CARD
+// ==================================================
+
+function createRecordHTML(record) {
+
+  const parentSent =
+    record.parent ===
+    'TELAH DIHANTAR';
+
+
+  const warningSent =
+    record.warning ===
+    'TELAH DIKELUARKAN';
+
+
+  return `
+
+    <div class="record-card">
+
+      <div class="flex
+                  justify-between
+                  items-start
+                  gap-3
+                  mb-4">
+
+        <div>
+
+          <div class="small-label">
+            ${escapeHtml(record.timestamp)}
+          </div>
+
+          <div class="text-lg
+                      font-black
+                      mt-1">
+
+            ${escapeHtml(record.nama)}
+
+          </div>
+
+          <div class="text-slate-400
+                      text-sm">
+
+            Kelas ${escapeHtml(record.kelas)}
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="mb-3">
+
+        <div class="small-label">
+          KESALAHAN
+        </div>
+
+        <div class="mt-1">
+          ${escapeHtml(record.kesalahan)}
+        </div>
+
+      </div>
+
+
+      <div class="mb-4">
+
+        <div class="small-label">
+          TINDAKAN GURU
+        </div>
+
+        <div class="mt-1">
+          ${escapeHtml(record.tindakan)}
+        </div>
+
+      </div>
+
+
+      <div class="grid
+                  grid-cols-1
+                  md:grid-cols-2
+                  gap-3">
+
+
+        <!-- WHATSAPP -->
+
+        ${
+          parentSent
+
+          ?
+
+          `
+          <div class="badge badge-green text-center py-3">
+            ✓ TELAH DIHANTAR KE IBUBAPA
+          </div>
+          `
+
+          :
+
+          `
+          <button
+            onclick="sendParent(${record.row})"
+            class="btn-main whatsapp">
+
+            📱 HANTAR KE IBUBAPA
+
+          </button>
+          `
+        }
+
+
+        <!-- WARNING -->
+
+        ${
+          warningSent
+
+          ?
+
+          `
+          <div class="badge badge-red text-center py-3">
+            ✓ SURAT AMARAN DIKELUARKAN
+          </div>
+          `
+
+          :
+
+          `
+          <button
+            onclick="markWarning(${record.row})"
+            class="btn-main warning-btn">
+
+            ⚠️ SURAT AMARAN
+
+          </button>
+          `
+        }
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+// ==================================================
+// SEND PARENT WHATSAPP
+// ==================================================
+
+function sendParent(row) {
+
+  const record =
+    records.find(r =>
+      Number(r.row) === Number(row)
+    );
+
+
+  if (!record) {
+
+    alert('Rekod tidak dijumpai.');
+    return;
+
+  }
+
+
+  const student =
+    students.find(s =>
+      s.name.trim().toLowerCase() ===
+      record.nama.trim().toLowerCase()
+    );
+
+
+  if (!student) {
+
+    alert(
+      'Nombor telefon ibu bapa untuk murid ini tidak dijumpai dalam Senarai.'
+    );
+
+    return;
+
+  }
+
+
+  let phone =
+    String(student.phone || '')
+      .replace(/\D/g, '');
+
+
+  if (!phone) {
+
+    alert(
+      'Nombor HP ibu bapa belum diisi.'
+    );
+
+    return;
+
+  }
+
+
+  // Malaysia number
+  if (phone.startsWith('0')) {
+    phone =
+      '6' + phone;
+  }
+
+
+  const message =
+
+`Assalamualaikum dan salam sejahtera.
+
+Dimaklumkan bahawa anak tuan/puan, *${record.nama}*, dari kelas *${record.kelas}*, telah direkodkan atas satu kesalahan disiplin.
+
+*Jenis Kesalahan:*
+${record.kesalahan}
+
+*Tindakan Guru:*
+${record.tindakan}
+
+Kerjasama dan perhatian pihak tuan/puan amat dihargai bagi membantu membimbing anak kita ke arah disiplin yang lebih baik.
+
+Terima kasih.`;
+
+
+  const url =
+    'https://wa.me/' +
+    phone +
+    '?text=' +
+    encodeURIComponent(message);
+
+
+  window.open(
+    url,
+    '_blank'
+  );
+
+
+  // Mark as sent after opening WhatsApp
+
+  setTimeout(() => {
+
+    markParent(row);
+
+  }, 800);
+
+}
+
+
+// ==================================================
+// MARK PARENT
+// ==================================================
+
+function markParent(row) {
+
+  apiRequest(
+
+    {
+      action: 'markParent',
+      password: adminPassword,
+      row: row
+    },
+
+    function(data) {
+
+      if (data.success) {
+
+        const record =
+          records.find(r =>
+            Number(r.row) === Number(row)
+          );
+
+        if (record) {
+          record.parent =
+            'TELAH DIHANTAR';
+        }
+
+        renderRecords();
+
+      }
+
+    }
+
+  );
+
+}
+
+
+// ==================================================
+// MARK WARNING
+// ==================================================
+
+function markWarning(row) {
+
+  if (!confirm(
+    'Tandakan surat amaran sebagai telah dikeluarkan?'
+  )) {
+    return;
+  }
+
+
+  showLoading();
+
+
+  apiRequest(
+
+    {
+      action: 'markWarning',
+      password: adminPassword,
+      row: row
+    },
+
+    function(data) {
+
+      hideLoading();
+
+      if (!data.success) {
+
+        alert(data.message);
+        return;
+
+      }
+
+
+      const record =
+        records.find(r =>
+          Number(r.row) === Number(row)
+        );
+
+
+      if (record) {
+
+        record.warning =
+          'TELAH DIKELUARKAN';
+
+      }
+
+
+      renderRecords();
+
+    }
+
+  );
+
+}
+
+
+// ==================================================
+// LOADING
+// ==================================================
+
+function showLoading() {
+
+  document
+    .getElementById('loading')
+    .classList.remove('hidden');
+
+}
+
+
+function hideLoading() {
+
+  document
+    .getElementById('loading')
+    .classList.add('hidden');
+
+}
+
+
+// ==================================================
+// ESCAPE HTML
+// ==================================================
+
+function escapeHtml(value) {
+
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+}
+
+</script>
+
+</body>
+</html>
