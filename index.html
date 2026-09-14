@@ -1214,9 +1214,7 @@ function setRecordFilter(filter) {
 function renderRecords() {
 
   const container =
-    document.getElementById(
-      'recordsContainer'
-    );
+    document.getElementById('recordsContainer');
 
   const search =
     document
@@ -1225,9 +1223,37 @@ function renderRecords() {
       .trim()
       .toLowerCase();
 
+  // ================================
+  // DATE FILTER
+  // ================================
+
+  const now = new Date();
+
+  // Today: 00:00:00
+  const startToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+
+  // Monday of current week
+  const day = now.getDay();
+  const diffToMonday = day === 0 ? 6 : day - 1;
+
+  const startWeek = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() - diffToMonday
+  );
+
+  startWeek.setHours(0, 0, 0, 0);
 
   const filtered =
     records.filter(record => {
+
+      // ================================
+      // SEARCH FILTER
+      // ================================
 
       const text =
         (
@@ -1237,34 +1263,76 @@ function renderRecords() {
           record.tindakan
         ).toLowerCase();
 
-      return text.includes(search);
+      if (!text.includes(search)) {
+        return false;
+      }
+
+      // ================================
+      // DATE FILTER
+      // ================================
+
+      if (recordFilter === 'all') {
+        return true;
+      }
+
+      // Convert timestamp from Google Sheet
+      const recordDate = new Date(record.timestamp);
+
+      // Invalid date = don't show
+      if (isNaN(recordDate.getTime())) {
+        return false;
+      }
+
+      if (recordFilter === 'today') {
+
+        return recordDate >= startToday &&
+               recordDate < new Date(
+                 startToday.getTime() + 24 * 60 * 60 * 1000
+               );
+
+      }
+
+      if (recordFilter === 'week') {
+
+        return recordDate >= startWeek &&
+               recordDate < new Date(
+                 startWeek.getTime() + 7 * 24 * 60 * 60 * 1000
+               );
+
+      }
+
+      return true;
 
     });
 
 
+  // ================================
   // STATS
+  // ================================
 
   document
     .getElementById('statTotal')
     .textContent =
-      records.length;
-
+      filtered.length;
 
   document
     .getElementById('statParent')
     .textContent =
-      records.filter(r =>
+      filtered.filter(r =>
         r.parent !== 'TELAH DIHANTAR'
       ).length;
-
 
   document
     .getElementById('statWarning')
     .textContent =
-      records.filter(r =>
+      filtered.filter(r =>
         r.warning === 'TELAH DIKELUARKAN'
       ).length;
 
+
+  // ================================
+  // EMPTY
+  // ================================
 
   if (!filtered.length) {
 
@@ -1281,9 +1349,12 @@ function renderRecords() {
     `;
 
     return;
-
   }
 
+
+  // ================================
+  // DISPLAY RECORDS
+  // ================================
 
   container.innerHTML =
     filtered
