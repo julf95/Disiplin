@@ -225,6 +225,193 @@ body {
   color: white;
 }
 
+/* =========================================
+   COMPACT KETUA DISIPLIN RECORDS
+   ========================================= */
+
+.records-table {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #334155;
+  border-radius: 14px;
+}
+
+.records-table-inner {
+  min-width: 1050px;
+}
+
+.record-row {
+  display: grid;
+  grid-template-columns: 135px 1.5fr 55px 1.5fr 1fr 1.2fr 125px 110px;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 10px;
+  border-bottom: 1px solid #1e293b;
+  font-size: 12px;
+}
+
+.record-row:last-child {
+  border-bottom: none;
+}
+
+.record-header {
+  background: #0f172a;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.record-data {
+  background: rgba(2, 6, 23, .55);
+}
+
+.record-data:hover {
+  background: rgba(30, 41, 59, .7);
+}
+
+.record-name {
+  font-weight: bold;
+  color: white;
+}
+
+.record-muted {
+  color: #94a3b8;
+}
+
+.record-cell {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compact-btn {
+  width: 100%;
+  padding: 7px 6px;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.compact-btn.whatsapp {
+  background: #16a34a;
+}
+
+.compact-btn.whatsapp:hover {
+  background: #15803d;
+}
+
+.compact-btn.warning-btn {
+  background: #b45309;
+}
+
+.compact-btn.warning-btn:hover {
+  background: #92400e;
+}
+
+.compact-badge {
+  display: block;
+  width: 100%;
+  padding: 7px 5px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 9px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.compact-badge.green {
+  background: rgba(34,197,94,.15);
+  color: #4ade80;
+}
+
+.compact-badge.red {
+  background: rgba(239,68,68,.15);
+  color: #f87171;
+}
+
+@media (max-width: 700px) {
+
+  .records-table-inner {
+      min-width: 1050px;
+    }
+
+  .record-row {
+    font-size: 11px;
+  }
+
+}
+
+/* =========================================
+   BOTTOM ANDROID STYLE NAVIGATION
+   ========================================= */
+
+.bottom-nav {
+  position: fixed;
+  left: 50%;
+  bottom: 15px;
+  transform: translateX(-50%);
+
+  width: min(430px, calc(100% - 24px));
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  background: rgba(15, 23, 42, .95);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 20px;
+
+  padding: 6px;
+
+  box-shadow:
+    0 15px 40px rgba(0,0,0,.45);
+
+  backdrop-filter: blur(15px);
+
+  z-index: 800;
+}
+
+.nav-item {
+  border: none;
+  background: transparent;
+  color: #64748b;
+
+  padding: 9px 5px;
+
+  border-radius: 15px;
+
+  font-size: 10px;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: .2s;
+}
+
+.nav-item:hover {
+  color: white;
+}
+
+.nav-item.active {
+  background: #0284c7;
+  color: white;
+}
+
+.nav-icon {
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+
+/* Give page some bottom room */
+.container-main {
+  padding-bottom: 110px;
+}
 </style>
 
 </head>
@@ -233,6 +420,8 @@ body {
 <body>
 
 <div class="container-main">
+
+<div id="recordPage">
 
   <!-- HEADER -->
 
@@ -336,7 +525,7 @@ body {
         </option>
 
         <option>
-          Bermain sewaktu guru mengajar
+          Bermain sewaktu guru mengajar/berucap
         </option>
 
         <option>
@@ -344,7 +533,7 @@ body {
         </option>
 
         <option>
-          Bermain sewaktu solat/rutin
+          Bermain sewaktu ibadat
         </option>
 
         <option>
@@ -368,7 +557,7 @@ body {
         </option>
 
         <option>
-          Penggunaan telefon / peranti tanpa kebenaran
+          Penggunaan barang larangan
         </option>
 
         <option>
@@ -377,6 +566,54 @@ body {
 
       </select>
 
+    </div>
+    
+    <!-- TEMPAT -->
+
+    <div class="mb-6">
+    
+      <label class="label">
+        TEMPAT KEJADIAN
+      </label>
+    
+      <select
+        id="tempat"
+        class="input-box">
+    
+        <option value="">
+          -- Pilih tempat --
+        </option>
+    
+        <option value="Kelas">
+          Kelas
+        </option>
+    
+        <option value="Tandas">
+          Tandas
+        </option>
+    
+        <option value="Surau/Dewan">
+          Surau/Dewan
+        </option>
+    
+        <option value="Pejabat">
+          Pejabat
+        </option>
+    
+        <option value="Dapur">
+          Dapur
+        </option>
+    
+        <option value="Luar Kelas">
+          Luar Kelas
+        </option>
+    
+        <option value="Halaman Sekolah">
+          Halaman Sekolah
+        </option>
+    
+      </select>
+    
     </div>
 
 
@@ -435,27 +672,19 @@ body {
 
   </div>
 
+</div>
+
 
   <!-- ADMIN -->
 
-  <div class="text-center">
-
-    <button
-      onclick="openAdminLogin()"
-      class="text-slate-400 hover:text-white text-sm">
-
-      🔐 Akses Ketua Disiplin
-
-    </button>
-
-  </div>
+  
 
 
   <!-- ADMIN DASHBOARD -->
 
   <div
-    id="adminDashboard"
-    class="hidden mt-8">
+      id="adminDashboard"
+      class="hidden">
 
     <div class="glass rounded-3xl p-5 md:p-7">
 
@@ -573,9 +802,8 @@ body {
 
 
       <div
-        id="recordsContainer"
-        class="space-y-4">
-      </div>
+          id="recordsContainer">
+        </div>
 
     </div>
 
@@ -924,6 +1152,11 @@ function saveRecord() {
     document.getElementById(
       'kesalahan'
     ).value;
+    
+  const tempat =
+      document.getElementById(
+        'tempat'
+      ).value;
 
   const tindakan =
     document.getElementById(
@@ -940,6 +1173,16 @@ function saveRecord() {
     return;
 
   }
+  
+  if (!tempat) {
+
+      alert(
+        'Sila pilih tempat kejadian.'
+      );
+    
+      return;
+    
+    }
 
 
   if (!tindakan) {
@@ -969,6 +1212,9 @@ function saveRecord() {
 
       kesalahan:
         kesalahan,
+    
+        tempat:
+            tempat,
 
       tindakan:
         tindakan
@@ -1006,6 +1252,10 @@ function saveRecord() {
       document
         .getElementById('kesalahan')
         .value = '';
+        
+     document
+      .getElementById('tempat')
+      .value = '';
 
       document
         .getElementById('tindakan')
@@ -1097,19 +1347,14 @@ function loginAdmin() {
 
       closeAdminLogin();
 
-      document
-        .getElementById('adminDashboard')
-        .classList.remove('hidden');
+      adminPassword = password;
 
-      renderRecords();
-
-      document
-        .getElementById(
-          'adminDashboard'
-        )
-        .scrollIntoView({
-          behavior: 'smooth'
-        });
+        records =
+          data.records || [];
+        
+        closeAdminLogin();
+        
+        showAdminPage();
 
     }
 
@@ -1357,10 +1602,36 @@ function renderRecords() {
   // DISPLAY RECORDS
   // ================================
 
-  container.innerHTML =
-    filtered
-      .map(record => createRecordHTML(record))
-      .join('');
+  container.innerHTML = `
+
+      <div class="records-table">
+    
+        <div class="records-table-inner">
+    
+          <!-- HEADER -->
+          <div class="record-row record-header">
+
+              <div>TARIKH</div>
+              <div>NAMA</div>
+              <div>KELAS</div>
+              <div>KESALAHAN</div>
+              <div>TEMPAT</div>
+              <div>TINDAKAN</div>
+              <div>IBUBAPA</div>
+              <div>AMARAN</div>
+            
+            </div>
+    
+          <!-- RECORDS -->
+          ${filtered
+            .map(record => createRecordHTML(record))
+            .join('')}
+    
+        </div>
+    
+      </div>
+    
+    `;
 
 }
 
@@ -1372,84 +1643,51 @@ function renderRecords() {
 function createRecordHTML(record) {
 
   const parentSent =
-    record.parent ===
-    'TELAH DIHANTAR';
-
+    record.parent === 'TELAH DIHANTAR';
 
   const warningSent =
-    record.warning ===
-    'TELAH DIKELUARKAN';
-
+    record.warning === 'TELAH DIKELUARKAN';
 
   return `
 
-    <div class="record-card">
+    <div class="record-row record-data">
 
-      <div class="flex
-                  justify-between
-                  items-start
-                  gap-3
-                  mb-4">
-
-        <div>
-
-          <div class="small-label">
-            ${escapeHtml(record.timestamp)}
-          </div>
-
-          <div class="text-lg
-                      font-black
-                      mt-1">
-
-            ${escapeHtml(record.nama)}
-
-          </div>
-
-          <div class="text-slate-400
-                      text-sm">
-
-            Kelas ${escapeHtml(record.kelas)}
-
-          </div>
-
-        </div>
-
+      <!-- TARIKH -->
+      <div class="record-cell record-muted">
+        ${escapeHtml(record.timestamp)}
       </div>
 
-
-      <div class="mb-3">
-
-        <div class="small-label">
-          KESALAHAN
-        </div>
-
-        <div class="mt-1">
-          ${escapeHtml(record.kesalahan)}
-        </div>
-
+      <!-- NAMA -->
+      <div class="record-cell record-name"
+           title="${escapeHtml(record.nama)}">
+        ${escapeHtml(record.nama)}
       </div>
 
-
-      <div class="mb-4">
-
-        <div class="small-label">
-          TINDAKAN GURU
-        </div>
-
-        <div class="mt-1">
-          ${escapeHtml(record.tindakan)}
-        </div>
-
+      <!-- KELAS -->
+      <div class="record-cell">
+        ${escapeHtml(record.kelas)}
       </div>
 
+      <!-- KESALAHAN -->
+      <div class="record-cell"
+           title="${escapeHtml(record.kesalahan)}">
+        ${escapeHtml(record.kesalahan)}
+      </div>
+      
+      <!-- TEMPAT -->
+        <div class="record-cell record-muted"
+             title="${escapeHtml(record.tempat)}">
+          ${escapeHtml(record.tempat)}
+        </div>
 
-      <div class="grid
-                  grid-cols-1
-                  md:grid-cols-2
-                  gap-3">
+      <!-- TINDAKAN -->
+      <div class="record-cell record-muted"
+           title="${escapeHtml(record.tindakan)}">
+        ${escapeHtml(record.tindakan)}
+      </div>
 
-
-        <!-- WHATSAPP -->
+      <!-- IBUBAPA -->
+      <div>
 
         ${
           parentSent
@@ -1457,8 +1695,8 @@ function createRecordHTML(record) {
           ?
 
           `
-          <div class="badge badge-green text-center py-3">
-            ✓ TELAH DIHANTAR KE IBUBAPA
+          <div class="compact-badge green">
+            ✓ TELAH DIHANTAR
           </div>
           `
 
@@ -1467,16 +1705,18 @@ function createRecordHTML(record) {
           `
           <button
             onclick="sendParent(${record.row})"
-            class="btn-main whatsapp">
+            class="compact-btn whatsapp">
 
-            📱 HANTAR KE IBUBAPA
+            📱 HANTAR
 
           </button>
           `
         }
 
+      </div>
 
-        <!-- WARNING -->
+      <!-- AMARAN -->
+      <div>
 
         ${
           warningSent
@@ -1484,8 +1724,8 @@ function createRecordHTML(record) {
           ?
 
           `
-          <div class="badge badge-red text-center py-3">
-            ✓ SURAT AMARAN DIKELUARKAN
+          <div class="compact-badge red">
+            ✓ DIKELUARKAN
           </div>
           `
 
@@ -1494,9 +1734,9 @@ function createRecordHTML(record) {
           `
           <button
             onclick="markWarning(${record.row})"
-            class="btn-main warning-btn">
+            class="compact-btn warning-btn">
 
-            ⚠️ SURAT AMARAN
+            ⚠️ AMARAN
 
           </button>
           `
@@ -1507,7 +1747,6 @@ function createRecordHTML(record) {
     </div>
 
   `;
-
 }
 
 
@@ -1586,7 +1825,9 @@ ${record.tindakan}
 
 Kerjasama dan perhatian pihak tuan/puan amat dihargai bagi membantu membimbing anak kita ke arah disiplin yang lebih baik.
 
-Terima kasih.`;
+Terima kasih.
+
+***Chat ini dihantar secara automatik dari sistem disiplin sekolah.`;
 
 
   const url =
@@ -1748,7 +1989,103 @@ function escapeHtml(value) {
 
 }
 
+// ==================================================
+// PAGE NAVIGATION
+// ==================================================
+
+function showRecordPage() {
+
+  document
+    .getElementById('recordPage')
+    .classList.remove('hidden');
+
+  document
+    .getElementById('adminDashboard')
+    .classList.add('hidden');
+
+  document
+    .getElementById('navRecord')
+    .classList.add('active');
+
+  document
+    .getElementById('navAdmin')
+    .classList.remove('active');
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+function handleAdminTab() {
+
+  // Already authenticated during this session
+  if (adminPassword) {
+    showAdminPage();
+    return;
+  }
+
+  // Not authenticated yet
+  openAdminLogin();
+}
+
+function showAdminPage() {
+
+  document
+    .getElementById('recordPage')
+    .classList.add('hidden');
+
+  document
+    .getElementById('adminDashboard')
+    .classList.remove('hidden');
+
+  document
+    .getElementById('navRecord')
+    .classList.remove('active');
+
+  document
+    .getElementById('navAdmin')
+    .classList.add('active');
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+
+  renderRecords();
+}
+
 </script>
+
+<!-- =========================================
+     BOTTOM APP NAVIGATION
+     ========================================= -->
+
+<div class="bottom-nav">
+
+  <button
+    id="navRecord"
+    class="nav-item active"
+    onclick="showRecordPage()">
+
+    <div class="nav-icon">📋</div>
+    <div>REKOD</div>
+
+  </button>
+
+
+  <button
+      id="navAdmin"
+      class="nav-item"
+      onclick="handleAdminTab()">
+    
+      <div class="nav-icon">🔐</div>
+      <div>KETUA DISIPLIN</div>
+    
+    </button>
+
+</div>
 
 </body>
 </html>
+
