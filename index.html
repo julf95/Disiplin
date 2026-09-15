@@ -11,6 +11,7 @@
 <title>Rekod Disiplin Pelajar</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 
@@ -707,6 +708,83 @@ body {
         </button>
 
       </div>
+      
+      <!-- MONTHLY DISCIPLINE ANALYSIS -->
+
+        <div class="mb-6">
+        
+          <button
+            id="monthlyAnalysisBtn"
+            onclick="toggleMonthlyChart()"
+            class="w-full rounded-2xl bg-slate-900 border border-slate-800 p-4 text-left hover:bg-slate-800 transition">
+        
+            <div class="flex items-center justify-between">
+        
+              <div class="flex items-center gap-3">
+        
+                <div class="text-2xl">
+                  📊
+                </div>
+        
+                <div>
+        
+                  <div class="text-xs font-bold tracking-widest text-sky-400">
+                    ANALISIS DISIPLIN
+                  </div>
+        
+                  <div class="text-lg font-black">
+                    Lihat Analisis Bulanan
+                  </div>
+        
+                </div>
+        
+              </div>
+        
+              <div
+                id="monthlyAnalysisArrow"
+                class="text-slate-400 text-xl transition-transform">
+                ▼
+              </div>
+        
+            </div>
+        
+          </button>
+        
+        
+          <!-- COLLAPSIBLE CHART -->
+        
+          <div
+            id="monthlyChartSection"
+            class="hidden mt-3 rounded-2xl bg-slate-900 border border-slate-800 p-4">
+        
+            <div class="flex items-center justify-between mb-4">
+        
+              <div>
+        
+                <div class="text-xs font-bold tracking-widest text-sky-400">
+                  ANALISIS DISIPLIN
+                </div>
+        
+                <div class="text-lg font-black">
+                  Rekod Mengikut Bulan
+                </div>
+        
+              </div>
+        
+              <div class="text-xs text-slate-500">
+                Semua rekod
+              </div>
+        
+            </div>
+        
+            <div
+              id="monthlyChart"
+              style="width:100%; height:280px;">
+            </div>
+        
+          </div>
+        
+        </div>
 
 
       <!-- STATS -->
@@ -904,6 +982,8 @@ let records = [];
 let adminPassword = '';
 
 let recordFilter = 'today';
+
+let monthlyChart = null;
 
 
 // ==================================================
@@ -1388,11 +1468,241 @@ function loadRecords() {
       records =
         data.records || [];
 
+      renderMonthlyChart();
       renderRecords();
 
     }
 
   );
+
+}
+
+// ==================================================
+// TOGGLE MONTHLY CHART
+// ==================================================
+
+function toggleMonthlyChart() {
+
+  const section =
+    document.getElementById(
+      'monthlyChartSection'
+    );
+
+  const arrow =
+    document.getElementById(
+      'monthlyAnalysisArrow'
+    );
+
+  if (section.classList.contains('hidden')) {
+
+    // SHOW
+    section.classList.remove('hidden');
+
+    arrow.style.transform =
+      'rotate(180deg)';
+
+    // Make sure chart is updated
+    renderMonthlyChart();
+
+  } else {
+
+    // HIDE
+    section.classList.add('hidden');
+
+    arrow.style.transform =
+      'rotate(0deg)';
+
+  }
+
+}
+
+// ==================================================
+// MONTHLY DISCIPLINE CHART
+// ==================================================
+
+function renderMonthlyChart() {
+
+  const chartContainer =
+    document.getElementById('monthlyChart');
+
+  if (!chartContainer) return;
+
+  // Month names
+  const monthNames = [
+    'Januari',
+    'Februari',
+    'Mac',
+    'April',
+    'Mei',
+    'Jun',
+    'Julai',
+    'Ogos',
+    'September',
+    'Oktober',
+    'November',
+    'Disember'
+  ];
+
+  // Current year
+  const currentYear = new Date().getFullYear();
+
+  // Start with 0 for every month
+  const monthlyCounts =
+    Array(12).fill(0);
+
+  // Count ALL records
+  records.forEach(record => {
+
+    if (!record.timestamp) return;
+
+    const date =
+      new Date(record.timestamp);
+
+    if (isNaN(date.getTime())) return;
+
+    // Only current year
+    if (date.getFullYear() !== currentYear) {
+      return;
+    }
+
+    const month =
+      date.getMonth();
+
+    monthlyCounts[month]++;
+
+  });
+
+
+  // Destroy previous chart
+  if (monthlyChart) {
+
+    monthlyChart.destroy();
+
+    monthlyChart = null;
+
+  }
+
+
+  const ctx =
+    document
+      .createElement('canvas');
+
+  chartContainer.innerHTML = '';
+
+  chartContainer.appendChild(ctx);
+
+
+  monthlyChart =
+    new Chart(ctx, {
+
+      type: 'bar',
+
+      data: {
+
+        labels: monthNames,
+
+        datasets: [
+
+          {
+            label: 'Jumlah Rekod',
+
+            data: monthlyCounts,
+
+            borderWidth: 0,
+
+            borderRadius: 8,
+
+            backgroundColor:
+              'rgba(14, 165, 233, 0.75)',
+
+            hoverBackgroundColor:
+              'rgba(56, 189, 248, 0.9)'
+          }
+
+        ]
+
+      },
+
+      options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+          legend: {
+            display: false
+          },
+
+          tooltip: {
+
+            callbacks: {
+
+              label: function(context) {
+
+                return (
+                  ' ' +
+                  context.parsed.y +
+                  ' rekod'
+                );
+
+              }
+
+            }
+
+          }
+
+        },
+
+        scales: {
+
+          x: {
+
+            ticks: {
+
+              color: '#94a3b8',
+
+              font: {
+                size: 11
+              }
+
+            },
+
+            grid: {
+              display: false
+            }
+
+          },
+
+          y: {
+
+            beginAtZero: true,
+
+            ticks: {
+
+              precision: 0,
+
+              color: '#94a3b8',
+
+              stepSize: 1
+
+            },
+
+            grid: {
+
+              color:
+                'rgba(148,163,184,0.08)'
+
+            }
+
+          }
+
+        }
+
+      }
+
+    });
 
 }
 
@@ -2048,6 +2358,7 @@ function showAdminPage() {
     behavior: 'smooth'
   });
 
+  renderMonthlyChart();
   renderRecords();
 }
 
@@ -2065,7 +2376,7 @@ function showAdminPage() {
     onclick="showRecordPage()">
 
     <div class="nav-icon">📋</div>
-    <div>REKOD</div>
+    <div>REKOD BAHARU</div>
 
   </button>
 
