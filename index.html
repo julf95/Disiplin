@@ -547,17 +547,11 @@ body {
         <!-- FILTER REKOD -->
         <div class="grid grid-cols-3 gap-2 mb-5">
         
-          <button
-            id="filterAll"
-            onclick="setRecordFilter('all')"
-            class="filter-btn active">
-            SEMUA
-          </button>
-        
+         
           <button
             id="filterToday"
             onclick="setRecordFilter('today')"
-            class="filter-btn">
+            class="filter-btn active">
             HARI INI
           </button>
         
@@ -566,6 +560,13 @@ body {
             onclick="setRecordFilter('week')"
             class="filter-btn">
             MINGGU INI
+          </button>
+          
+          <button
+            id="filterAll"
+            onclick="setRecordFilter('all')"
+            class="filter-btn">
+            SEMUA
           </button>
         
         </div>
@@ -678,7 +679,7 @@ let records = [];
 
 let adminPassword = '';
 
-let recordFilter = 'all';
+let recordFilter = 'today';
 
 
 // ==================================================
