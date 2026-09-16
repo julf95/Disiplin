@@ -1066,28 +1066,29 @@ function apiRequest(params, callback) {
 // ==================================================
 
 function loadStudents() {
+  const input = document.getElementById('studentInput');
+
+  // Show loading status immediately
+  input.disabled = true;
+  input.placeholder = '🔄 Memuat senarai nama...';
 
   apiRequest(
-    {
-      action: 'students'
-    },
-
+    { action: 'students' },
     function(data) {
-
       if (!data.success) {
-
+        input.disabled = false;
+        input.placeholder = '❌ Gagal memuat. Taip untuk cuba lagi...';
         alert(data.message);
         return;
-
       }
 
-      students =
-        data.students || [];
+      students = data.students || [];
 
+      // Ready to search
+      input.disabled = false;
+      input.placeholder = 'Taip nama murid...';
     }
-
   );
-
 }
 
 
@@ -2395,4 +2396,3 @@ function showAdminPage() {
 
 </body>
 </html>
-
