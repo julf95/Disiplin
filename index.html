@@ -799,6 +799,143 @@ body {
         </div>
 
 
+      <!-- KESALAHAN ANALYSIS -->
+
+        <div class="mb-6">
+        
+          <button
+            id="errorAnalysisBtn"
+            onclick="toggleErrorChart()"
+            class="w-full rounded-2xl bg-slate-900 border border-slate-800 p-4 text-left hover:bg-slate-800 transition">
+        
+            <div class="flex items-center justify-between">
+        
+              <div class="flex items-center gap-3">
+        
+                <div class="text-2xl">
+                  🚨
+                </div>
+        
+                <div>
+        
+                  <div class="text-xs font-bold tracking-widest text-sky-400">
+                    ANALISIS DISIPLIN
+                  </div>
+        
+                  <div class="text-lg font-black">
+                    Lihat Analisis Kesalahan
+                  </div>
+        
+                </div>
+        
+              </div>
+        
+              <div
+                id="errorAnalysisArrow"
+                class="text-slate-400 text-xl transition-transform">
+                ▼
+              </div>
+        
+            </div>
+        
+          </button>
+        
+        
+          <!-- COLLAPSIBLE ERROR CHART -->
+        
+          <div
+            id="errorChartSection"
+            class="hidden mt-3 rounded-2xl bg-slate-900 border border-slate-800 p-4">
+        
+            <!-- FILTER -->
+        
+            <div class="grid grid-cols-3 gap-3 mb-5">
+        
+              <div>
+        
+                <label class="label">
+                  BULAN
+                </label>
+        
+                <select
+                  id="errorMonth"
+                  class="input-box"
+                  onchange="setupErrorWeek(); renderErrorChart()">
+        
+                  <option value="0">Januari</option>
+                  <option value="1">Februari</option>
+                  <option value="2">Mac</option>
+                  <option value="3">April</option>
+                  <option value="4">Mei</option>
+                  <option value="5">Jun</option>
+                  <option value="6">Julai</option>
+                  <option value="7">Ogos</option>
+                  <option value="8">September</option>
+                  <option value="9">Oktober</option>
+                  <option value="10">November</option>
+                  <option value="11">Disember</option>
+        
+                </select>
+        
+              </div>
+        
+        
+              <div>
+        
+                <label class="label">
+                  TAHUN
+                </label>
+        
+                <select
+                  id="errorYear"
+                  class="input-box"
+                  onchange="setupErrorWeek(); renderErrorChart()">
+        
+                </select>
+        
+              </div>
+              
+              <div>
+
+                  <label class="label">
+                    MINGGU
+                  </label>
+                
+                  <select
+                    id="errorWeek"
+                    class="input-box"
+                    onchange="renderErrorChart()">
+                
+                  </select>
+                
+                </div>
+        
+            </div>
+        
+        
+            <!-- CHART -->
+        
+            <div class="mb-4">
+        
+              <div
+                id="errorChart"
+                style="width:100%; height:300px;">
+              </div>
+        
+            </div>
+        
+        
+            <!-- LEGEND -->
+        
+            <div
+              id="errorLegend"
+              class="grid grid-cols-1 md:grid-cols-2 gap-2">
+            </div>
+        
+          </div>
+        
+        </div>
+      
       <!-- STATS -->
 
       <div class="grid grid-cols-3 gap-3 mb-6">
@@ -848,6 +985,8 @@ body {
         </div>
 
       </div>
+      
+      
 
 
       <!-- SEARCH RECORD -->
@@ -996,6 +1135,7 @@ let adminPassword = '';
 let recordFilter = 'today';
 
 let monthlyChart = null;
+let errorChart = null;
 
 
 // ==================================================
@@ -1719,6 +1859,544 @@ function renderMonthlyChart() {
 
 }
 
+// ==================================================
+// TOGGLE ERROR ANALYSIS
+// ==================================================
+
+function toggleErrorChart() {
+
+  const section =
+    document.getElementById('errorChartSection');
+
+  const arrow =
+    document.getElementById('errorAnalysisArrow');
+
+  if (section.classList.contains('hidden')) {
+
+    section.classList.remove('hidden');
+
+    arrow.style.transform =
+      'rotate(180deg)';
+
+    setupErrorYear();
+
+    // Default to current month
+    document.getElementById('errorMonth').value =
+      new Date().getMonth();
+
+    setupErrorWeek();
+
+    renderErrorChart();
+
+  } else {
+
+    section.classList.add('hidden');
+
+    arrow.style.transform =
+      'rotate(0deg)';
+
+  }
+
+}
+
+
+// ==================================================
+// SETUP ERROR YEAR
+// ==================================================
+
+function setupErrorYear() {
+
+  const select =
+    document.getElementById('errorYear');
+
+  if (!select) return;
+
+  const currentYear =
+    new Date().getFullYear();
+
+  const years = [];
+
+  // Get years from records
+  records.forEach(record => {
+
+    if (!record.timestamp) return;
+
+    const date =
+      new Date(record.timestamp);
+
+    if (isNaN(date.getTime())) return;
+
+    const year =
+      date.getFullYear();
+
+    if (!years.includes(year)) {
+      years.push(year);
+    }
+
+  });
+
+  // Always include current year
+  if (!years.includes(currentYear)) {
+    years.push(currentYear);
+  }
+
+  years.sort((a, b) => b - a);
+
+  const oldValue =
+    select.value;
+
+  select.innerHTML =
+    years.map(year => `
+      <option value="${year}">
+        ${year}
+      </option>
+    `).join('');
+
+  // Keep previous selection if possible
+  if (years.includes(Number(oldValue))) {
+
+    select.value = oldValue;
+
+  } else {
+
+    select.value = currentYear;
+
+  }
+
+}
+
+// ==================================================
+// SETUP ERROR WEEK
+// MONDAY - FRIDAY
+// ==================================================
+
+function setupErrorWeek() {
+
+  const monthSelect =
+    document.getElementById('errorMonth');
+
+  const yearSelect =
+    document.getElementById('errorYear');
+
+  const weekSelect =
+    document.getElementById('errorWeek');
+
+  if (
+    !monthSelect ||
+    !yearSelect ||
+    !weekSelect
+  ) return;
+
+  const month =
+    Number(monthSelect.value);
+
+  const year =
+    Number(yearSelect.value);
+
+  const firstDay =
+    new Date(year, month, 1);
+
+  const lastDay =
+    new Date(year, month + 1, 0);
+
+  const weeks = [];
+
+  // Find Monday on or before the first day
+  let monday =
+    new Date(firstDay);
+
+  const day =
+    monday.getDay();
+
+  const diff =
+    day === 0 ? -6 : 1 - day;
+
+  monday.setDate(
+    monday.getDate() + diff
+  );
+
+
+  // Generate Monday-Friday weeks
+  while (monday <= lastDay) {
+
+    const friday =
+      new Date(monday);
+
+    friday.setDate(
+      friday.getDate() + 4
+    );
+
+    weeks.push({
+      start: new Date(monday),
+      end: friday
+    });
+
+    monday.setDate(
+      monday.getDate() + 7
+    );
+
+  }
+
+
+  weekSelect.innerHTML =
+    weeks.map((week, index) => {
+
+      return `
+        <option value="${index}">
+          Minggu ${index + 1}
+          (${formatErrorDate(week.start)}-${formatErrorDate(week.end)})
+        </option>
+      `;
+
+    }).join('');
+
+}
+
+function formatErrorDate(date) {
+
+  const day =
+    String(date.getDate())
+      .padStart(2, '0');
+
+  const month =
+    String(date.getMonth() + 1)
+      .padStart(2, '0');
+
+  return `${day}/${month}`;
+
+}
+
+// ==================================================
+// ERROR ANALYSIS PIE CHART
+// ==================================================
+
+function renderErrorChart() {
+
+  const chartContainer =
+    document.getElementById('errorChart');
+
+  const legendContainer =
+    document.getElementById('errorLegend');
+
+  const monthSelect =
+    document.getElementById('errorMonth');
+
+  const yearSelect =
+    document.getElementById('errorYear');
+
+  if (
+    !chartContainer ||
+    !legendContainer ||
+    !monthSelect ||
+    !yearSelect
+  ) return;
+
+
+  const selectedMonth =
+    Number(monthSelect.value);
+
+  const selectedYear =
+    Number(yearSelect.value);
+
+    const weekSelect =
+      document.getElementById('errorWeek');
+    
+    const selectedWeek =
+      Number(weekSelect.value);
+    
+    const firstDay =
+      new Date(
+        selectedYear,
+        selectedMonth,
+        1
+      );
+    
+    const day =
+      firstDay.getDay();
+    
+    const diff =
+      day === 0 ? -6 : 1 - day;
+    
+    const weekStart =
+      new Date(firstDay);
+    
+    weekStart.setDate(
+      weekStart.getDate() + diff
+    );
+    
+    weekStart.setDate(
+      weekStart.getDate() +
+      (selectedWeek * 7)
+    );
+    
+    const weekEnd =
+      new Date(weekStart);
+    
+    weekEnd.setDate(
+      weekEnd.getDate() + 4
+    );
+    
+    weekStart.setHours(0, 0, 0, 0);
+    weekEnd.setHours(23, 59, 59, 999);
+
+
+  // Count each type of error
+
+  const counts = {};
+
+  records.forEach(record => {
+
+    if (!record.timestamp) return;
+
+    const date =
+      new Date(record.timestamp);
+
+    if (isNaN(date.getTime())) return;
+
+
+    // Week filter
+    // Monday - Friday
+    
+    if (
+      date < weekStart ||
+      date > weekEnd
+    ) {
+      return;
+    }
+
+
+    const error =
+      String(record.kesalahan || '').trim();
+
+    if (!error) return;
+
+
+    if (!counts[error]) {
+      counts[error] = 0;
+    }
+
+    counts[error]++;
+
+  });
+
+
+  const labels =
+    Object.keys(counts);
+
+  const values =
+    labels.map(label => counts[label]);
+
+
+  // Destroy previous chart
+
+  if (errorChart) {
+
+    errorChart.destroy();
+
+    errorChart = null;
+
+  }
+
+
+  // No records
+
+  if (!labels.length) {
+
+    chartContainer.innerHTML = `
+      <div class="h-full flex items-center justify-center
+                  text-slate-500 text-sm">
+        Tiada rekod kesalahan untuk bulan dan tahun ini.
+      </div>
+    `;
+
+    legendContainer.innerHTML = '';
+
+    return;
+
+  }
+
+
+  // Create canvas
+
+  chartContainer.innerHTML = '';
+
+  const canvas =
+    document.createElement('canvas');
+
+  chartContainer.appendChild(canvas);
+
+
+  // Create pie chart
+
+  errorChart =
+    new Chart(canvas, {
+
+      type: 'pie',
+
+      data: {
+
+        labels: labels,
+
+        datasets: [
+
+          {
+            data: values,
+        
+            borderWidth: 2,
+        
+            borderColor: '#020617',
+        
+            backgroundColor: [
+              '#38bdf8',
+              '#f97316',
+              '#a78bfa',
+              '#22c55e',
+              '#f43f5e',
+              '#eab308',
+              '#14b8a6',
+              '#ec4899',
+              '#8b5cf6',
+              '#06b6d4',
+              '#84cc16',
+              '#fb7185',
+              '#64748b'
+            ]
+        
+          }
+        
+        ]
+
+      },
+
+      options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+          legend: {
+            display: false
+          },
+
+          tooltip: {
+
+            callbacks: {
+
+              label: function(context) {
+
+                const total =
+                  context.dataset.data
+                    .reduce(
+                      (a, b) => a + b,
+                      0
+                    );
+
+                const value =
+                  context.parsed;
+
+                const percentage =
+                  ((value / total) * 100)
+                    .toFixed(1);
+
+                return (
+                  ' ' +
+                  context.label +
+                  ': ' +
+                  value +
+                  ' rekod (' +
+                  percentage +
+                  '%)'
+                );
+
+              }
+
+            }
+
+          }
+
+        }
+
+      }
+
+    });
+
+
+  // Generate colour legend
+
+  const colors =
+    errorChart.data.datasets[0]
+      .backgroundColor;
+
+
+  legendContainer.innerHTML =
+    labels.map((label, index) => {
+
+      const value =
+        values[index];
+
+      const total =
+        values.reduce(
+          (a, b) => a + b,
+          0
+        );
+
+      const percentage =
+        ((value / total) * 100)
+          .toFixed(1);
+
+      const color =
+        colors[index];
+
+
+      return `
+
+        <div
+          class="flex items-center justify-between
+                 rounded-xl bg-slate-800/70
+                 px-3 py-2">
+
+          <div class="flex items-center gap-2 min-w-0">
+
+            <div
+              style="
+                width:12px;
+                height:12px;
+                min-width:12px;
+                border-radius:50%;
+                background:${color};
+              ">
+            </div>
+
+            <div
+              class="text-xs text-slate-300 truncate"
+              title="${escapeHtml(label)}">
+
+              ${escapeHtml(label)}
+
+            </div>
+
+          </div>
+
+          <div
+            class="text-xs font-bold text-white ml-2">
+
+            ${value}
+            <span class="text-slate-500">
+              (${percentage}%)
+            </span>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join('');
+
+}
+
 
 // ==================================================
 // RENDER RECORDS
@@ -2132,7 +2810,7 @@ function sendParent(row) {
 
   const message =
 
-`Assalamualaikum dan salam sejahtera.
+`🚨Assalamualaikum dan salam sejahtera.
 
 Dimaklumkan bahawa anak tuan/puan, *${record.nama}*, dari kelas *${record.kelas}*, telah direkodkan atas satu kesalahan disiplin.
 
@@ -2146,7 +2824,7 @@ Kerjasama dan perhatian pihak tuan/puan amat dihargai bagi membantu membimbing a
 
 Terima kasih.
 
-***Chat ini dihantar secara automatik dari sistem disiplin sekolah.`;
+***Chat ini dihantar secara automatik dari sistem *e-Disiplin SRAR.* `;
 
 
   const url =
