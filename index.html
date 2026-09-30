@@ -932,6 +932,240 @@ body {
         
         </div>
       
+      <!-- ANALISIS BY KESALAHAN -->
+
+        <div class="mb-6">
+        
+          <button
+            id="studentErrorAnalysisBtn"
+            onclick="toggleStudentErrorAnalysis()"
+            class="w-full rounded-2xl bg-slate-900 border border-slate-800 p-4 text-left hover:bg-slate-800 transition">
+        
+            <div class="flex items-center justify-between">
+        
+              <div class="flex items-center gap-3">
+        
+                <div class="text-2xl">
+                  👤
+                </div>
+        
+                <div>
+        
+                  <div class="text-xs font-bold tracking-widest text-sky-400">
+                    ANALISIS DISIPLIN
+                  </div>
+        
+                  <div class="text-lg font-black">
+                    ANALISIS BY KESALAHAN
+                  </div>
+        
+                </div>
+        
+              </div>
+        
+              <div
+                id="studentErrorAnalysisArrow"
+                class="text-slate-400 text-xl transition-transform">
+                ▼
+              </div>
+        
+            </div>
+        
+          </button>
+        
+        
+          <!-- COLLAPSIBLE STUDENT ERROR ANALYSIS -->
+        
+          <div
+            id="studentErrorAnalysisSection"
+            class="hidden mt-3 rounded-2xl bg-slate-900 border border-slate-800 p-4">
+        
+            <!-- SELECT ERROR -->
+        
+            <div class="mb-5">
+        
+              <label class="label">
+                JENIS KESALAHAN
+              </label>
+        
+              <select
+                id="studentErrorSelect"
+                class="input-box"
+                onchange="renderStudentErrorAnalysis()">
+        
+                <option value="">
+                  -- Pilih kesalahan --
+                </option>
+        
+              </select>
+        
+            </div>
+        
+        
+            <!-- SUMMARY -->
+        
+            <div
+              id="studentErrorSummary"
+              class="hidden rounded-2xl bg-red-500/10 border border-red-500/20 p-4 mb-4">
+        
+              <div class="text-xs text-red-400 font-bold tracking-widest">
+                JUMLAH REKOD
+              </div>
+        
+              <div
+                id="studentErrorCount"
+                class="text-2xl font-black mt-1">
+                0
+              </div>
+        
+            </div>
+        
+        
+            <!-- STUDENT LIST -->
+        
+            <div
+              id="studentErrorList">
+        
+              <div class="text-center text-slate-500 py-8 text-sm">
+                Pilih jenis kesalahan untuk melihat senarai murid.
+              </div>
+        
+            </div>
+        
+          </div>
+        
+        </div>
+      
+      <!-- ANALISIS BY NAMA -->
+
+        <div class="mb-6">
+        
+          <button
+            id="nameAnalysisBtn"
+            onclick="toggleNameAnalysis()"
+            class="w-full rounded-2xl bg-slate-900 border border-slate-800 p-4 text-left hover:bg-slate-800 transition">
+        
+            <div class="flex items-center justify-between">
+        
+              <div class="flex items-center gap-3">
+        
+                <div class="text-2xl">
+                  👨‍🎓
+                </div>
+        
+                <div>
+        
+                  <div class="text-xs font-bold tracking-widest text-sky-400">
+                    ANALISIS DISIPLIN
+                  </div>
+        
+                  <div class="text-lg font-black">
+                    ANALISIS BY NAMA
+                  </div>
+        
+                </div>
+        
+              </div>
+        
+              <div
+                id="nameAnalysisArrow"
+                class="text-slate-400 text-xl transition-transform">
+                ▼
+              </div>
+        
+            </div>
+        
+          </button>
+        
+        
+          <!-- COLLAPSIBLE NAME ANALYSIS -->
+        
+          <div
+            id="nameAnalysisSection"
+            class="hidden mt-3 rounded-2xl bg-slate-900 border border-slate-800 p-4">
+        
+            <div class="mb-5">
+        
+              <label class="label">
+                CARI NAMA MURID
+              </label>
+        
+              <div class="relative">
+        
+                <input
+                  id="analysisStudentInput"
+                  class="input-box"
+                  placeholder="Taip nama murid..."
+                  autocomplete="off"
+                  oninput="searchAnalysisStudent()"
+                >
+        
+                <div
+                  id="analysisStudentSuggestions"
+                  class="student-suggestions hidden">
+                </div>
+        
+              </div>
+        
+            </div>
+        
+        
+            <!-- SELECTED STUDENT -->
+        
+            <div
+              id="analysisSelectedStudent"
+              class="hidden rounded-2xl bg-sky-500/10 border border-sky-500/20 p-4 mb-5">
+        
+              <div
+                id="analysisSelectedName"
+                class="text-sky-300 font-bold text-lg">
+              </div>
+        
+              <div
+                id="analysisSelectedClass"
+                class="text-slate-400 text-sm mt-1">
+              </div>
+        
+            </div>
+        
+        
+            <!-- RECORD COUNT -->
+        
+            <div
+              id="nameAnalysisSummary"
+              class="hidden rounded-2xl bg-slate-800 p-4 mb-4">
+        
+              <div class="text-xs text-slate-400 font-bold tracking-widest">
+                JUMLAH REKOD DISIPLIN
+              </div>
+        
+              <div
+                id="nameAnalysisCount"
+                class="text-2xl font-black mt-1 text-white">
+                0
+              </div>
+        
+            </div>
+        
+        
+            <!-- STUDENT RECORDS -->
+        
+            <div
+              id="nameAnalysisRecords">
+        
+              <div class="text-center text-slate-500 py-8 text-sm">
+        
+                Cari dan pilih nama murid untuk melihat
+                rekod disiplin.
+        
+              </div>
+        
+            </div>
+        
+          </div>
+        
+        </div>
+      
       <!-- STATS -->
 
       <div class="grid grid-cols-3 gap-3 mb-6">
@@ -1619,6 +1853,7 @@ function loadRecords() {
 
       renderMonthlyChart();
       renderRecords();
+      setupStudentErrorSelect();
 
     }
 
@@ -2390,6 +2625,837 @@ function renderErrorChart() {
       `;
 
     }).join('');
+
+}
+
+// ==================================================
+// TOGGLE ANALISIS BY KESALAHAN
+// ==================================================
+
+function toggleStudentErrorAnalysis() {
+
+  const section =
+    document.getElementById(
+      'studentErrorAnalysisSection'
+    );
+
+  const arrow =
+    document.getElementById(
+      'studentErrorAnalysisArrow'
+    );
+
+  if (section.classList.contains('hidden')) {
+
+    // SHOW
+
+    section.classList.remove('hidden');
+
+    arrow.style.transform =
+      'rotate(180deg)';
+
+    setupStudentErrorSelect();
+
+  } else {
+
+    // HIDE
+
+    section.classList.add('hidden');
+
+    arrow.style.transform =
+      'rotate(0deg)';
+
+  }
+
+}
+
+
+// ==================================================
+// SETUP KESALAHAN DROPDOWN
+// ==================================================
+
+function setupStudentErrorSelect() {
+
+  const select =
+    document.getElementById(
+      'studentErrorSelect'
+    );
+
+  if (!select) return;
+
+
+  // Get all unique errors from records
+
+  const errors = [];
+
+  records.forEach(record => {
+
+    const error =
+      String(record.kesalahan || '').trim();
+
+    if (
+      error &&
+      !errors.includes(error)
+    ) {
+
+      errors.push(error);
+
+    }
+
+  });
+
+
+  // Sort alphabetically
+
+  errors.sort((a, b) =>
+    a.localeCompare(b, 'ms')
+  );
+
+
+  const oldValue =
+    select.value;
+
+
+  select.innerHTML = `
+    <option value="">
+      -- Pilih kesalahan --
+    </option>
+  `;
+
+
+  errors.forEach(error => {
+
+    const option =
+      document.createElement('option');
+
+    option.value = error;
+
+    option.textContent = error;
+
+    select.appendChild(option);
+
+  });
+
+
+  // Restore previous selection
+
+  if (errors.includes(oldValue)) {
+
+    select.value = oldValue;
+
+  }
+
+
+  renderStudentErrorAnalysis();
+
+}
+
+
+// ==================================================
+// ANALISIS BY KESALAHAN
+// ==================================================
+
+function renderStudentErrorAnalysis() {
+
+  const select =
+    document.getElementById(
+      'studentErrorSelect'
+    );
+
+  const list =
+    document.getElementById(
+      'studentErrorList'
+    );
+
+  const summary =
+    document.getElementById(
+      'studentErrorSummary'
+    );
+
+  const count =
+    document.getElementById(
+      'studentErrorCount'
+    );
+
+
+  if (
+    !select ||
+    !list ||
+    !summary ||
+    !count
+  ) return;
+
+
+  const selectedError =
+    String(select.value || '').trim();
+
+
+  // Nothing selected
+
+  if (!selectedError) {
+
+    summary.classList.add('hidden');
+
+    list.innerHTML = `
+
+      <div class="text-center text-slate-500 py-8 text-sm">
+
+        Pilih jenis kesalahan untuk melihat
+        senarai murid.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  // Find matching records
+
+  const matchingRecords =
+    records
+      .filter(record => {
+
+        const error =
+          String(
+            record.kesalahan || ''
+          ).trim();
+
+        return error === selectedError;
+
+      })
+      .sort((a, b) => {
+
+        const dateA =
+          new Date(a.timestamp);
+
+        const dateB =
+          new Date(b.timestamp);
+
+        return dateB - dateA;
+
+      });
+
+
+  // Update count
+
+  summary.classList.remove('hidden');
+
+  count.textContent =
+    matchingRecords.length;
+
+
+  // No records
+
+  if (!matchingRecords.length) {
+
+    list.innerHTML = `
+
+      <div class="text-center text-slate-500 py-8 text-sm">
+
+        Tiada murid mempunyai rekod
+        bagi kesalahan ini.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  // Render student list
+
+  list.innerHTML = `
+
+    <div class="space-y-2">
+
+      ${matchingRecords
+        .map((record, index) => {
+
+          return `
+
+            <div
+              class="rounded-2xl
+                     bg-slate-800/70
+                     border border-slate-700
+                     p-4">
+
+              <div
+                class="flex items-start gap-3">
+
+                <!-- NUMBER -->
+
+                <div
+                  class="w-8 h-8
+                         min-w-8
+                         rounded-full
+                         bg-red-500/15
+                         text-red-400
+                         flex
+                         items-center
+                         justify-center
+                         text-xs
+                         font-black">
+
+                  ${index + 1}
+
+                </div>
+
+
+                <!-- STUDENT -->
+
+                <div class="min-w-0 flex-1">
+
+                  <div
+                    class="font-bold
+                           text-white
+                           break-words">
+
+                    ${escapeHtml(
+                      record.nama
+                    )}
+
+                  </div>
+
+
+                  <div
+                    class="text-xs
+                           text-slate-400
+                           mt-1">
+
+                    Kelas
+                    <span class="text-slate-300 font-bold">
+                      ${escapeHtml(
+                        record.kelas
+                      )}
+                    </span>
+
+                  </div>
+
+
+                  <div
+                    class="text-xs
+                           text-slate-500
+                           mt-2">
+
+                    🕒
+                    ${escapeHtml(
+                      record.timestamp
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          `;
+
+        })
+        .join('')}
+
+    </div>
+
+  `;
+
+}
+
+
+// ==================================================
+// TOGGLE ANALISIS BY NAMA
+// ==================================================
+
+function toggleNameAnalysis() {
+
+  const section =
+    document.getElementById(
+      'nameAnalysisSection'
+    );
+
+  const arrow =
+    document.getElementById(
+      'nameAnalysisArrow'
+    );
+
+  if (section.classList.contains('hidden')) {
+
+    // SHOW
+
+    section.classList.remove('hidden');
+
+    arrow.style.transform =
+      'rotate(180deg)';
+
+  } else {
+
+    // HIDE
+
+    section.classList.add('hidden');
+
+    arrow.style.transform =
+      'rotate(0deg)';
+
+  }
+
+}
+
+
+// ==================================================
+// SEARCH STUDENT FOR ANALYSIS
+// ==================================================
+
+function searchAnalysisStudent() {
+
+  const input =
+    document.getElementById(
+      'analysisStudentInput'
+    );
+
+  const box =
+    document.getElementById(
+      'analysisStudentSuggestions'
+    );
+
+  const query =
+    input.value
+      .trim()
+      .toLowerCase();
+
+
+  // Clear previous selected student
+
+  document
+    .getElementById(
+      'analysisSelectedStudent'
+    )
+    .classList.add('hidden');
+
+
+  document
+    .getElementById(
+      'nameAnalysisSummary'
+    )
+    .classList.add('hidden');
+
+
+  document
+    .getElementById(
+      'nameAnalysisRecords'
+    )
+    .innerHTML = `
+
+      <div class="text-center text-slate-500 py-8 text-sm">
+
+        Cari dan pilih nama murid untuk melihat
+        rekod disiplin.
+
+      </div>
+
+    `;
+
+
+  if (!query) {
+
+    box.classList.add('hidden');
+
+    return;
+
+  }
+
+
+  // Search from student list
+
+  const matches =
+    students
+      .filter(student =>
+        String(student.name || '')
+          .toLowerCase()
+          .includes(query)
+      )
+      .slice(0, 10);
+
+
+  box.innerHTML = '';
+
+
+  if (!matches.length) {
+
+    box.innerHTML = `
+
+      <div class="student-option text-slate-500">
+        Tiada nama murid dijumpai.
+      </div>
+
+    `;
+
+    box.classList.remove('hidden');
+
+    return;
+
+  }
+
+
+  matches.forEach(student => {
+
+    const div =
+      document.createElement('div');
+
+    div.className =
+      'student-option';
+
+
+    div.innerHTML = `
+
+      <div class="font-bold">
+
+        ${escapeHtml(student.name)}
+
+      </div>
+
+      <div class="text-sm text-slate-400">
+
+        ${escapeHtml(student.kelas)}
+
+      </div>
+
+    `;
+
+
+    div.onclick = function() {
+
+      selectAnalysisStudent(student);
+
+    };
+
+
+    box.appendChild(div);
+
+  });
+
+
+  box.classList.remove('hidden');
+
+}
+
+
+// ==================================================
+// SELECT STUDENT FOR ANALYSIS
+// ==================================================
+
+function selectAnalysisStudent(student) {
+
+  const input =
+    document.getElementById(
+      'analysisStudentInput'
+    );
+
+  const box =
+    document.getElementById(
+      'analysisStudentSuggestions'
+    );
+
+
+  input.value =
+    student.name;
+
+
+  box.classList.add('hidden');
+
+
+  // Show selected student
+
+  document
+    .getElementById(
+      'analysisSelectedStudent'
+    )
+    .classList.remove('hidden');
+
+
+  document
+    .getElementById(
+      'analysisSelectedName'
+    )
+    .textContent =
+      student.name;
+
+
+  document
+    .getElementById(
+      'analysisSelectedClass'
+    )
+    .textContent =
+      'Kelas ' + student.kelas;
+
+
+  renderNameAnalysis(student.name);
+
+}
+
+
+// ==================================================
+// RENDER STUDENT ANALYSIS
+// ==================================================
+
+function renderNameAnalysis(studentName) {
+
+  const container =
+    document.getElementById(
+      'nameAnalysisRecords'
+    );
+
+  const summary =
+    document.getElementById(
+      'nameAnalysisSummary'
+    );
+
+  const count =
+    document.getElementById(
+      'nameAnalysisCount'
+    );
+
+
+  if (
+    !container ||
+    !summary ||
+    !count
+  ) return;
+
+
+  const targetName =
+    String(studentName || '')
+      .trim()
+      .toLowerCase();
+
+
+  // Find ALL records for this student
+
+  const studentRecords =
+    records
+      .filter(record => {
+
+        return String(record.nama || '')
+          .trim()
+          .toLowerCase() === targetName;
+
+      })
+      .sort((a, b) => {
+
+        const dateA =
+          new Date(a.timestamp);
+
+        const dateB =
+          new Date(b.timestamp);
+
+        return dateB - dateA;
+
+      });
+
+
+  // Count
+
+  summary.classList.remove('hidden');
+
+  count.textContent =
+    studentRecords.length;
+
+
+  // No records
+
+  if (!studentRecords.length) {
+
+    container.innerHTML = `
+
+      <div class="text-center text-slate-500 py-8 text-sm">
+
+        Murid ini belum mempunyai
+        rekod disiplin.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  // Render records
+
+  container.innerHTML = `
+
+    <div class="space-y-3">
+
+      ${studentRecords
+        .map((record, index) => {
+
+          return `
+
+            <div
+              class="rounded-2xl
+                     bg-slate-800/70
+                     border border-slate-700
+                     p-4">
+
+              <!-- TOP -->
+
+              <div
+                class="flex items-start
+                       justify-between
+                       gap-3
+                       mb-4">
+
+                <div>
+
+                  <div
+                    class="text-xs
+                           text-slate-500
+                           font-bold
+                           tracking-widest">
+
+                    REKOD #${index + 1}
+
+                  </div>
+
+                  <div
+                    class="text-sm
+                           text-slate-300
+                           mt-1">
+
+                    🕒
+                    ${escapeHtml(
+                      record.timestamp
+                    )}
+
+                  </div>
+
+                </div>
+
+
+                <div
+                  class="rounded-lg
+                         bg-sky-500/10
+                         border border-sky-500/20
+                         px-3 py-1.5
+                         text-xs
+                         text-sky-300
+                         font-bold
+                         whitespace-nowrap">
+
+                  ${escapeHtml(
+                    record.kelas
+                  )}
+
+                </div>
+
+              </div>
+
+
+              <!-- DETAILS -->
+
+              <div class="space-y-3">
+
+
+                <!-- KESALAHAN -->
+
+                <div>
+
+                  <div
+                    class="text-[10px]
+                           text-slate-500
+                           font-bold
+                           tracking-widest
+                           mb-1">
+
+                    KESALAHAN
+
+                  </div>
+
+                  <div
+                    class="text-sm
+                           text-white
+                           font-semibold">
+
+                    ${escapeHtml(
+                      record.kesalahan
+                    )}
+
+                  </div>
+
+                </div>
+
+
+                <!-- TEMPAT -->
+
+                <div>
+
+                  <div
+                    class="text-[10px]
+                           text-slate-500
+                           font-bold
+                           tracking-widest
+                           mb-1">
+
+                    TEMPAT
+
+                  </div>
+
+                  <div
+                    class="text-sm
+                           text-slate-300">
+
+                    ${escapeHtml(
+                      record.tempat || '-'
+                    )}
+
+                  </div>
+
+                </div>
+
+
+                <!-- TINDAKAN -->
+
+                <div>
+
+                  <div
+                    class="text-[10px]
+                           text-slate-500
+                           font-bold
+                           tracking-widest
+                           mb-1">
+
+                    TINDAKAN GURU
+
+                  </div>
+
+                  <div
+                    class="text-sm
+                           text-slate-300">
+
+                    ${escapeHtml(
+                      record.tindakan || '-'
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          `;
+
+        })
+        .join('')}
+
+    </div>
+
+  `;
 
 }
 
