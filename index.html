@@ -779,7 +779,7 @@ body {
                   </div>
         
                   <div class="text-lg font-black">
-                    Lihat Analisis Bulanan
+                    ANALISIS BULANAN
                   </div>
         
                 </div>
@@ -857,7 +857,7 @@ body {
                   </div>
         
                   <div class="text-lg font-black">
-                    Lihat Analisis Mingguan
+                    ANALISIS MINGGUAN
                   </div>
         
                 </div>
@@ -2307,17 +2307,56 @@ function setupErrorWeek() {
   }
 
 
-  weekSelect.innerHTML =
-    weeks.map((week, index) => {
-
-      return `
-        <option value="${index}">
-          Minggu ${index + 1}
-          (${formatErrorDate(week.start)}-${formatErrorDate(week.end)})
-        </option>
-      `;
-
-    }).join('');
+    weekSelect.innerHTML =
+        weeks.map((week, index) => {
+    
+          return `
+            <option value="${index}">
+              Minggu ${index + 1}
+              (${formatErrorDate(week.start)}-${formatErrorDate(week.end)})
+            </option>
+          `;
+    
+        }).join('');
+    
+    
+      // ==========================================
+      // AUTO SELECT CURRENT WEEK
+      // ==========================================
+    
+      const today = new Date();
+    
+      // Only auto-select if selected month/year
+      // matches the current month/year
+      if (
+        year === today.getFullYear() &&
+        month === today.getMonth()
+      ) {
+    
+        const todayTime = today.getTime();
+    
+        const currentWeekIndex =
+          weeks.findIndex(week => {
+    
+            const start = new Date(week.start);
+            const end = new Date(week.end);
+    
+            end.setHours(23, 59, 59, 999);
+    
+            return (
+              todayTime >= start.getTime() &&
+              todayTime <= end.getTime()
+            );
+    
+          });
+    
+        if (currentWeekIndex >= 0) {
+    
+          weekSelect.value = currentWeekIndex;
+    
+        }
+    
+      }
 
 }
 
@@ -4152,7 +4191,7 @@ function showAdminPage() {
   renderMonthlyChart();
   renderRecords();
 }
-
+m
 </script>
 
 <!-- =========================================
