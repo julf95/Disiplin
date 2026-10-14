@@ -4005,11 +4005,7 @@ const masaWhatsApp =
     month: 'short',
     day: '2-digit',
     year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-    timeZone: 'Asia/Kuala_Lumpur'
+    
   }).replace(',', '');
 
 
@@ -4020,11 +4016,11 @@ const masaWhatsApp =
 
 Dimaklumkan bahawa anak tuan/puan, *${record.nama}*, dari kelas *${record.kelas}*, telah direkodkan atas satu kesalahan disiplin.
 
+*Hari & Tarikh*
+${masaWhatsApp}
+
 *Jenis Kesalahan:*
 ${record.kesalahan}
-
-*Hari, Tarikh & Masa:*
-${masaWhatsApp}
 
 *Catatan:*
 ${record.catatan || '-'}
