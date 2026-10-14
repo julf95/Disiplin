@@ -3990,6 +3990,28 @@ function sendParent(row) {
     phone =
       '6' + phone;
   }
+  
+  
+const tarikhMasa = new Date(record.timestamp);
+
+const hariMelayu = [
+  'Ahad', 'Isnin', 'Selasa', 'Rabu',
+  'Khamis', 'Jumaat', 'Sabtu'
+];
+
+const masaWhatsApp =
+  hariMelayu[tarikhMasa.getDay()] + ' ' +
+  tarikhMasa.toLocaleString('en-US', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+    timeZone: 'Asia/Kuala_Lumpur'
+  }).replace(',', '');
+
 
 
   const message =
@@ -3998,8 +4020,8 @@ function sendParent(row) {
 
 Dimaklumkan bahawa anak tuan/puan, *${record.nama}*, dari kelas *${record.kelas}*, telah direkodkan atas satu kesalahan disiplin.
 
-*Jenis Kesalahan:*
-${record.kesalahan}
+*Hari, Tarikh & Masa:*
+${masaWhatsApp}
 
 *Masa:*
 ${record.timestamp}
