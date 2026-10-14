@@ -238,12 +238,12 @@ body {
 }
 
 .records-table-inner {
-  min-width: 1050px;
+  min-width: 1250px;
 }
 
 .record-row {
   display: grid;
-  grid-template-columns: 135px 1.5fr 55px 1.5fr 1fr 1.2fr 125px 110px;
+    grid-template-columns: 135px 1.5fr 55px 1.5fr 1fr 1.2fr 125px 110px 1.5fr;
   gap: 8px;
   align-items: center;
   padding: 9px 10px;
@@ -591,6 +591,23 @@ body {
             
 
       </select>
+
+    </div>
+    
+    <!-- CATATAN -->
+    <div class="mb-5">
+
+      <label class="label">
+        CATATAN (PILIHAN)
+      </label>
+
+      <textarea
+        id="catatan"
+        class="input-box"
+        rows="3"
+        placeholder="Masukkan catatan tambahan jika perlu..."
+        style="resize: vertical;"
+      ></textarea>
 
     </div>
     
@@ -1658,6 +1675,9 @@ function saveRecord() {
       'kesalahan'
     ).value;
     
+  const catatan =
+    document.getElementById('catatan').value.trim();
+    
   const tempat =
       document.getElementById(
         'tempat'
@@ -1717,6 +1737,9 @@ function saveRecord() {
 
       kesalahan:
         kesalahan,
+        
+      catatan:
+        catatan,
     
         tempat:
             tempat,
@@ -1758,6 +1781,10 @@ function saveRecord() {
         .getElementById('kesalahan')
         .value = '';
         
+     document
+        .getElementById('catatan')
+        .value = '';
+     
      document
       .getElementById('tempat')
       .value = '';
@@ -3761,6 +3788,7 @@ function renderRecords() {
               <div>KESALAHAN</div>
               <div>TEMPAT</div>
               <div>TINDAKAN</div>
+              <div>CATATAN</div>
               <div>IBUBAPA</div>
               <div>AMARAN</div>
             
@@ -3828,6 +3856,15 @@ function createRecordHTML(record) {
       <div class="record-cell record-muted"
            title="${escapeHtml(record.tindakan)}">
         ${escapeHtml(record.tindakan)}
+      </div>
+      
+            <!-- CATATAN -->
+      <div
+        class="record-cell record-muted"
+        title="${escapeHtml(record.catatan || '')}"
+        style="white-space: normal; overflow-wrap: anywhere;"
+      >
+        ${escapeHtml(record.catatan || '-')}
       </div>
 
       <!-- IBUBAPA -->
@@ -3963,6 +4000,12 @@ Dimaklumkan bahawa anak tuan/puan, *${record.nama}*, dari kelas *${record.kelas}
 
 *Jenis Kesalahan:*
 ${record.kesalahan}
+
+*Masa:*
+${record.timestamp}
+
+*Catatan:*
+${record.catatan || '-'}
 
 *Tindakan Guru:*
 ${record.tindakan}
